@@ -13,6 +13,33 @@ const config = {
     measurementId: "G-K9XP8GKMFX"
 };
 
+export const CreateUserProfileDocument = async (userAuth, additionalData) => {
+    if (!userAuth) return; // This means the user signed out, hence dont do anything
+
+    const userRef = firestore.doc(`users/${userAuth.uid}`);
+
+    const snapshot = await userRef.get();
+
+    if (!snapshot.exists) {
+        // Create user data into database
+        const { displayName, email } = userAuth;
+        const createdAt = new Date();
+
+        try {
+            await userRef.set({
+                displayName,
+                email,
+                createdAt,
+                ...additionalData
+            })
+        } catch(error) {
+            console.log('error creating user', error.message);
+        }
+    }
+
+    return userRef;
+}
+
 firebase.initializeApp(config);
 
 export const auth = firebase.auth();
