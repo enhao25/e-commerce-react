@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from "react-router-dom";
+import { connect } from 'react-redux';
 
 import { auth } from "../../Firebase/Firebase";
 
@@ -24,4 +25,10 @@ const Header = ({ currentUser }) => (
     </div>
 )
 
-export default Header;
+// From state, we will get the root reducer, then get the user and currentUser
+// mapStateToProps is the common naming convention for this function for connect
+const mapStateToProps = state => ({
+    currentUser: state.user.currentUser
+})
+
+export default connect(mapStateToProps)(Header);
