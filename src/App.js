@@ -1,7 +1,8 @@
 import React from 'react';
 import {
   Switch,
-  Route
+  Route,
+  Redirect
 } from "react-router-dom";
 
 import './App.css';
@@ -48,7 +49,8 @@ class App extends React.Component {
       }
       // If there is no current user
       else {
-        setCurrentUser(null);
+        // userAuth will be null in this case
+        setCurrentUser(userAuth);
       }
     })
   }
@@ -64,18 +66,22 @@ class App extends React.Component {
         <Switch>
           <Route exact path="/" component={HomePage} />
           <Route path="/shop" component={ShopPage} />
-          <Route path="/signin" component={SignInAndSignUp} />
+          <Route exact path="/signin" render={() => this.props.currentUser ? (<Redirect to="/" />) : (<SignInAndSignUp />)} />
         </Switch>
       </div>
     );
   }
 }
 
-const mapDispatchtoProps = dispatch => ({
+const mapStateToProps = ({ user }) => ({
+  currentUser: user.currentUser
+})
+
+const mapDispatchToProps = dispatch => ({
   // setCurrentUser(user) returns the object with type and payload before we dispatch the action
   setCurrentUser: user => dispatch(setCurrentUser(user))
 })
 
-// First arguement is the mapstatetoprops as we don't need any state
-// Second arguement is the mapDispatchtoProps
-export default connect(null, mapDispatchtoProps)(App);
+// First arguement is the mapStateToProps as we don't need any state
+// Second arguement is the mapDispatchToProps
+export default connect(mapStateToProps, mapDispatchToProps)(App);
