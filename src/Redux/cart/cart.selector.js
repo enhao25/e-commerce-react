@@ -9,13 +9,23 @@ export const selectCartItems = createSelector(
     (cart) => cart.cartItems
 )
 
+// Cart hidden value to open and close cart
 export const selectCartHidden = createSelector(
     [selectCart],
     (cart) => cart.hidden
 )
 
+// To calculate the total quantity on the cart
 export const selectCartItemsCount = createSelector(
     [selectCartItems], 
     cartItems => cartItems.reduce(
-        (accumaltedQuantity, cartItem) => accumaltedQuantity + cartItem.quantity, 0)
+        (accumulatedQuantity, cartItem) => accumulatedQuantity + cartItem.quantity, 0)
+)
+
+// 
+export const selectCartTotal = createSelector(
+    [selectCartItems],
+    cartItems => cartItems.reduce(
+        (accumulatedPrice, cartItem) => accumulatedPrice + (cartItem.quantity * cartItem.price), 0
+    )
 )
