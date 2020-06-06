@@ -4,7 +4,13 @@ import { persistStore } from 'redux-persist';
 
 import rootReducer from './root-reducer'
 
-const middlewares = [logger];
+const middlewares = [];
+
+// This ensures that our middle only applys when it is in development and not production
+// During npm run build, the node_env will change to production
+if (process.env.NODE_ENV === 'development') {
+    middlewares.push(logger);
+}
 
 // ...middlewares spreads the values from [logger] into applymiddleware
 export const store = createStore(rootReducer, applyMiddleware(...middlewares));

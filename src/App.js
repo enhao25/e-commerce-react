@@ -45,8 +45,6 @@ class App extends React.Component {
           setCurrentUser({
             id: snapshot.id,
             ...snapshot.data()
-          }, () => {
-            console.log(this.state);
           })
         });
       }
