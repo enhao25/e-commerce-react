@@ -7,6 +7,12 @@ export const selectShopCollections = createSelector(
     (shop) => shop.collections
 )
 
+// Object.keys return an array of keys in the object that was passed in 
+export const selectCollectionsForPreview = createSelector(
+    [selectShopCollections],
+    collections => Object.keys(collections).map(key => collections[key])
+)
+
 // createSelector is a curry function that is a function that returns a function
 export const selectCollection = collectionUrlParam => createSelector(
     [selectShopCollections],
