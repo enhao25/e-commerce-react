@@ -1,35 +1,36 @@
 import React from 'react';
-import { Link } from "react-router-dom";
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-
 import { auth } from "../../Firebase/Firebase";
 
 import { ReactComponent as Logo } from '../../Assets/crown.svg'
 
-import './Header.scss';
+// import './Header.scss';
+
+import { HeaderContainer, LogoContainer, OptionsContainer, OptionLink, OptionDiv } from './Header.styles'
+
 import CartIcon from "../Cart-Icon/Cart-Icon";
 import CartDropdown from '../Cart-dropdown/Cart-dropdown';
 import { selectCurrentUser } from '../../Redux/user/user-selector';
 import { selectCartHidden } from '../../Redux/cart/cart.selector';
 
 const Header = ({ currentUser, hidden }) => (
-    <div className="header">
-        <Link className='logo-container' to="/">
+    <HeaderContainer>
+        <LogoContainer to="/">
             <Logo className='logo' />
-        </Link>
-        <div className='options'>
-            <Link className="option" to="/shop"> SHOP </Link>
-            <Link className="option" to="/contact"> CONTACT </Link>
+        </LogoContainer>
+        <OptionsContainer>
+            <OptionLink to="/shop"> SHOP </OptionLink>
+            <OptionLink to="/contact"> CONTACT </OptionLink>
             {
                 currentUser ? 
-                    (<div className="option" onClick={() => auth.signOut()}>SIGN OUT </div>) :
-                    (<Link className="option" to="/signin">SIGN IN</Link>)
+                    (<OptionLink as="div" onClick={() => auth.signOut()}>SIGN OUT </OptionLink>) :
+                    (<OptionLink to="/signin">SIGN IN</OptionLink>)
             }
         <CartIcon />
-        </div>
+        </OptionsContainer>
         {hidden ? null : <CartDropdown />}
-    </div>
+    </HeaderContainer>
 )
 
 // From state, we will get the root reducer, then get the user and currentUser
