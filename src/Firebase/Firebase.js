@@ -40,6 +40,40 @@ export const CreateUserProfileDocument = async (userAuth, additionalData) => {
     return userRef;
 }
 
+// Generic function that takes in a key and an object and then creates a new collections in Firebase
+export const addCollectionAndDocuments = async (CollectionKey, objectsToAdd) => {
+    const collectionRef = firestore.collection(CollectionKey);
+    
+    // Using batch allows us to batch the request together so that if it any part fails, the entire request fails
+    // This ensures that we do not have a situation where only certain information pass through and stop
+    const batch = firestore.batch();
+    objectsToAdd.forEach(obj => {
+        const newDocRef = collectionRef.doc();
+        batch.set(newDocRef, obj)
+    })
+
+    return await batch.commit();
+}
+
+export const convertCollectionSnapshotToMap = (collections) => {
+    const transformCollection = collections.docs.map(doc => {
+        const { title, items } = doc.data();
+        
+        return {
+            // encodeURI converts the title to a string that is able to be a URL
+            routeName: encodeURI(title.toLowerCase()),
+            id: doc.id,
+            title: title,
+            items: items
+        }
+    });
+
+    return transformCollection.reduce((accumlator, collection) => {
+        accumlator[collection.title.toLowerCase()] = collection;
+        return accumlator;
+    } , {})
+}
+
 firebase.initializeApp(config);
 
 export const auth = firebase.auth();

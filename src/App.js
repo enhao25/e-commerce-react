@@ -19,6 +19,8 @@ import { setCurrentUser } from './Redux/user/user-action'
 import { selectCurrentUser } from './Redux/user/user-selector';
 import CheckoutPage from './Page/Checkout/Checkout';
 
+// import { selectCollectionsForPreview } from './Redux/shop/shop.selector'
+
 class App extends React.Component {
   /* Remove as we are using redux now
   constructor() {
@@ -52,6 +54,8 @@ class App extends React.Component {
       else {
         // userAuth will be null in this case
         setCurrentUser(userAuth);
+        // This code is to add the collectionsArray into the firebase automatically without us manually entering the data
+        // addCollectionAndDocuments('collections', collectionsArray.map(({title, items}) => ({title, items}) ));
       }
     })
   }
